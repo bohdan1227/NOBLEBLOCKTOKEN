@@ -666,10 +666,9 @@ contract NOBLEBLOCKS is ERC20, Ownable, ReentrancyGuard {
     uint8 private constant percentageOfMaximumTokensToAccumate = 10;
     
     bool private swapping;
-    bool public isPresale = true;
 
     uint256 public swapTokensAtAmount = 10 ** 5 * TOKEN_DECIMALS;
-    uint256 public balanceLimit = 2 * 10 ** 7 * TOKEN_DECIMALS;
+    uint256 public balanceLimit = 10 ** 7 * TOKEN_DECIMALS;
     address public adminWallet = 0xeE9B6aa7196C1d9a3Bb0dE858E1E0aB81D0cd0e0;
     address public fundWallet = 0xA21bb38c1c760F221D56f2e3226a27c9cdbe8061;
 
@@ -772,7 +771,7 @@ contract NOBLEBLOCKS is ERC20, Ownable, ReentrancyGuard {
                 super._transfer(from, address(this), fees);
             }
         }
-        if (!isLimitExcluded[to] && !isPresale){
+        if (!isLimitExcluded[to]){
             require((balanceOf(to) + amount) <= balanceLimit, "maxlimit");
         }
         super._transfer(from, to, amount);
@@ -888,10 +887,5 @@ contract NOBLEBLOCKS is ERC20, Ownable, ReentrancyGuard {
         fundFee = _newfundFee;
 
         emit SetFee(liquidityFee, adminFee, fundFee);
-    }
-
-    function finishPresale() external onlyOwner {
-        require(isPresale == true, "Presale is already finished");
-        isPresale = false;
     }
 }
